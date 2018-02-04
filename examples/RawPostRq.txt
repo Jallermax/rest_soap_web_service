@@ -1,0 +1,7 @@
+POST http://localhost:8080/?login=myLogin&message=myMessageL HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: application/json
+Content-Length: 0
+Host: localhost:8080
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.1.1 (java 1.5)
