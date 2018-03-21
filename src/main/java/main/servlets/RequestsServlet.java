@@ -1,6 +1,6 @@
-package com.jallermax.aplana;
+package main.servlets;
 
-import com.jallermax.aplana.templater.PageGenerator;
+import main.templater.PageGenerator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,15 +10,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static main.templater.PageGenerator.createPageVariablesMap;
+
 public class RequestsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Map<String, Object> pageVariables = createPageVariablesMap(request);
-        pageVariables.put("message", "");
-
-        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
+//        Map<String, Object> pageVariables = createPageVariablesMap(request);
+//        pageVariables.put("message", "");
+//
+//        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
+        response.getWriter().println(PageGenerator.updatePage(request, ""));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -39,17 +42,8 @@ public class RequestsServlet extends HttpServlet {
         }
         pageVariables.put("message", message == null ? "" : message);
 
-        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
-    }
-
-    private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
-        Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("method", request.getMethod());
-        pageVariables.put("URL", request.getRequestURL().toString());
-        pageVariables.put("pathInfo", request.getPathInfo());
-        pageVariables.put("sessionId", request.getSession().getId());
-        pageVariables.put("parameters", request.getParameterMap().toString());
-        return pageVariables;
+//        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
+        response.getWriter().println(PageGenerator.updatePage(request, message == null ? "" : message));
     }
 
     @Override

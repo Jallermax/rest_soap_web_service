@@ -6,7 +6,7 @@
 </head>
 <body>
 <form action="/page.html" method="POST">
-    Login: <input type="text" name="message"/>
+    Message: <input type="text" name="message"/>
     <input type="submit" value="Ok">
 </form>
 
@@ -21,6 +21,14 @@
 <p>SessionId: ${sessionId}</p>
 
 <p>Parameters: ${parameters}</p>
+
+<p>Authorization</p>
+<form method="POST">
+    Login: <input type="text" name="login"/>
+    Password: <input type="password" name="password"/>
+    <input type="submit" formaction="/signin" autofocus value="Sign in">
+    <input type="submit" formaction="/signup" value="Sign up">
+</form>
 
 </body>
 </html>
