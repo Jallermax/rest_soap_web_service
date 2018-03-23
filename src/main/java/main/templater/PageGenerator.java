@@ -3,19 +3,20 @@ package main.templater;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import main.SafeHashMap;
+import main.utils.SafeHashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
 import java.util.Map;
 
 
 public class PageGenerator {
-    private static final String HTML_DIR = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "templates";
+//    private static final String HTML_DIR = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "templates";
+    private static final String HTML_DIR = "templates";
 
     private static PageGenerator pageGenerator;
     private final Configuration cfg;
@@ -42,13 +43,15 @@ public class PageGenerator {
     }
 
 
-    public static String updatePage(HttpServletRequest request, String message) {
+    public static String updatePage(HttpServletRequest request, HttpServletResponse response, String message) {
 
         Map<String, Object> pageVariables = createPageVariablesMap(request);
         pageVariables.put("message", message);
+        pageVariables.put("responseCode", String.valueOf(response.getStatus()));
         return PageGenerator.instance().getPage("page.html", pageVariables);
     }
 
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
         Map<String, Object> pageVariables = new SafeHashMap();
         pageVariables.put("method", request.getMethod());

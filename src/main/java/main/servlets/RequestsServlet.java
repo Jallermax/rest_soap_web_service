@@ -21,10 +21,10 @@ public class RequestsServlet extends HttpServlet {
 //        pageVariables.put("message", "");
 //
 //        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
-        response.getWriter().println(PageGenerator.updatePage(request, ""));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(PageGenerator.updatePage(request, response, ""));
     }
 
     @Override
@@ -36,14 +36,14 @@ public class RequestsServlet extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         if (message == null || message.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             response.setStatus(HttpServletResponse.SC_OK);
         }
         pageVariables.put("message", message == null ? "" : message);
 
 //        response.getWriter().println(PageGenerator.instance().getPage("page.html", pageVariables));
-        response.getWriter().println(PageGenerator.updatePage(request, message == null ? "" : message));
+        response.getWriter().println(PageGenerator.updatePage(request, response, message == null ? "" : message));
     }
 
     @Override

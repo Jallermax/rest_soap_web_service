@@ -18,16 +18,17 @@ public class SignUpServlet extends HttpServlet {
         this.accountService = accountService;
     }
 
+    //sign up new user
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String login = request.getParameter("login");
         String pass = request.getParameter("password");
 
-        if (login == null) {
+        if (login == null || login.isEmpty()) {
             response.setContentType("text/html;charset=utf-8");
-            response.getWriter().println(PageGenerator.updatePage(request, "Login is invalid"));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Login is invalid"));
             return;
         }
 
@@ -37,13 +38,12 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        UserProfile userProfile = new UserProfile(login);
+        UserProfile userProfile = new UserProfile(login, pass);
         accountService.addNewUser(userProfile);
         Gson gson = new Gson();
         String json = gson.toJson(userProfile);
         response.setContentType("text/html;charset=utf-8");
-//        response.getWriter().println(json);
-        response.getWriter().println(PageGenerator.updatePage(request, json));
         response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(PageGenerator.updatePage(request, response, json));
     }
 }

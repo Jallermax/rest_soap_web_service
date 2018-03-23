@@ -31,17 +31,25 @@ public class SessionsServlet extends HttpServlet {
     //get logged user profile
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
+        doDelete(request, response);
+        if (1==1)
+        return;
         String sessionId = request.getSession().getId();
         UserProfile profile = accountService.getUserBySessionId(sessionId);
         if (profile == null) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Unauthorized"));
+
+
         } else {
             Gson gson = new Gson();
             String json = gson.toJson(profile);
             response.setContentType("text/html;charset=utf-8");
-            response.getWriter().println(json);
+//            response.getWriter().println(json);
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(PageGenerator.updatePage(request, response, json));
+
         }
     }
 
@@ -53,8 +61,8 @@ public class SessionsServlet extends HttpServlet {
 
         if (login == null || pass == null || login.isEmpty() || pass.isEmpty()) {
             response.setContentType("text/html;charset=utf-8");
-            response.getWriter().println(PageGenerator.updatePage(request, "Login or Password is empty!"));
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Login or Password is empty!"));
             return;
         }
 
@@ -62,20 +70,15 @@ public class SessionsServlet extends HttpServlet {
         if (profile == null || !profile.getPass().equals(pass)) {
             response.setContentType("text/html;charset=utf-8");
 
-            response.getWriter().println(PageGenerator.updatePage(request, "Unauthorized"));
-
-//            response.getWriter().println("Unauthorized");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Unauthorized"));
             return;
         }
 
         accountService.addSession(request.getSession().getId(), profile);
         response.setContentType("text/html;charset=utf-8");
-
-        response.getWriter().println(PageGenerator.updatePage(request, "Authorized: " + profile.getLogin()));
-
-//        response.getWriter().println("Authorized: " + profile.getLogin());
         response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().println(PageGenerator.updatePage(request, response, "Authorized: " + profile.getLogin()));
     }
 
     //sign out
@@ -86,11 +89,15 @@ public class SessionsServlet extends HttpServlet {
         if (profile == null) {
             response.setContentType("text/html;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Unauthorized!"));
+
         } else {
             accountService.deleteSession(sessionId);
             response.setContentType("text/html;charset=utf-8");
-            response.getWriter().println("Goodbye!");
+//            response.getWriter().println("Goodbye!");
             response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().println(PageGenerator.updatePage(request, response, "Goodbye, " + profile.getLogin()));
+
         }
 
     }
