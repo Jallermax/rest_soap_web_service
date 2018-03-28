@@ -1,9 +1,9 @@
-package main.templater;
+package com.aplana.apiPractice.templater;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import main.utils.SafeHashMap;
+import com.aplana.apiPractice.utils.SafeHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +15,6 @@ import java.util.Map;
 
 
 public class PageGenerator {
-//    private static final String HTML_DIR = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "templates";
     private static final String HTML_DIR = "templates";
 
     private static PageGenerator pageGenerator;

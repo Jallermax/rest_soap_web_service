@@ -1,26 +1,16 @@
-package main.servlets;
+package com.aplana.apiPractice.debugServlets;
 
+import com.aplana.apiPractice.accounts.UserProfile;
+import com.aplana.apiPractice.templater.PageGenerator;
 import com.google.gson.Gson;
-import main.accounts.AccountService;
-import main.accounts.UserProfile;
-import main.templater.PageGenerator;
+import com.aplana.apiPractice.accounts.AccountService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
-import static main.templater.PageGenerator.createPageVariablesMap;
-
-/**
- * @author v.chibrikov
- *         <p>
- *         Пример кода для курса на https://stepic.org/
- *         <p>
- *         Описание курса и лицензия: https://github.com/vitaly-chibrikov/stepic_java_webserver
- */
 public class SessionsServlet extends HttpServlet {
     private final AccountService accountService;
 

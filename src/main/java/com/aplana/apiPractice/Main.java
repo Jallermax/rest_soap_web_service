@@ -1,10 +1,10 @@
-package main;
+package com.aplana.apiPractice;
 
-import main.accounts.AccountService;
-import main.accounts.UserProfile;
-import main.servlets.RequestsServlet;
-import main.servlets.SessionsServlet;
-import main.servlets.SignUpServlet;
+import com.aplana.apiPractice.accounts.AccountService;
+import com.aplana.apiPractice.accounts.UserProfile;
+import com.aplana.apiPractice.debugServlets.RequestsServlet;
+import com.aplana.apiPractice.debugServlets.SessionsServlet;
+import com.aplana.apiPractice.debugServlets.SignUpServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Map<String, String> cfg = readConfig();
 
-        startWSDLServer(Integer.parseInt(cfg.get("servers.wsdl.port")));
+        startWSDLServer(cfg.get("servers.wsdl.ip"), Integer.parseInt(cfg.get("servers.wsdl.port")));
         startRestfulServer(Integer.parseInt(cfg.get("servers.rest.port")));
     }
 
@@ -52,8 +52,13 @@ public class Main {
         server.join();
     }
 
-    private static void startWSDLServer(int port) {
-        Endpoint.publish("http://localhost:" + port + "/wss/hello", new SoapWSImpl());
+    private static void startWSDLServer(String ip, int port) {
+        String endpointAdress = "http://" + ip + ":" + port + "/wss/hello";
+        Endpoint.publish(endpointAdress, new SoapWSImpl());
+        System.out.println("WSDL endpoint started at: " + endpointAdress);
+//        String endpointDocAdress = "http://" + ip + ":" + port + "/doc.asmx";
+//        Endpoint.publish(endpointDocAdress, new SoapDocWSImpl());
+//        System.out.println("WSDL endpoint started at: " + endpointDocAdress);
     }
 
     private static Map<String, String> readConfig() throws IOException {

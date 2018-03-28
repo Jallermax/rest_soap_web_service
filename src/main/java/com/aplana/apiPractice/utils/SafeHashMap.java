@@ -1,4 +1,4 @@
-package main.utils;
+package com.aplana.apiPractice.utils;
 
 import java.util.HashMap;
 

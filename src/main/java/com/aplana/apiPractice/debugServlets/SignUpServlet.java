@@ -1,9 +1,9 @@
-package main.servlets;
+package com.aplana.apiPractice.debugServlets;
 
+import com.aplana.apiPractice.templater.PageGenerator;
 import com.google.gson.Gson;
-import main.accounts.AccountService;
-import main.accounts.UserProfile;
-import main.templater.PageGenerator;
+import com.aplana.apiPractice.accounts.AccountService;
+import com.aplana.apiPractice.accounts.UserProfile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
