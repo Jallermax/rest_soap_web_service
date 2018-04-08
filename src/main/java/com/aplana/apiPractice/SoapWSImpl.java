@@ -1,8 +1,7 @@
 package com.aplana.apiPractice;
 
-import models.Profile;
+import com.aplana.apiPractice.models.Profile;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +35,6 @@ public class SoapWSImpl implements SoapWS {
     public Profile getProfile(Long id) {
         return ProfileManager.getInstance().getProfile(id);
     }
-//
-//    @Override
-//    public HashMap<Long, Profile> getProfileList() {
-//        return ProfileManager.getInstance().getProfiles();
-//    }
 
     @Override
     public String addProfile(Profile profile) {

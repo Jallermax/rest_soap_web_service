@@ -2,14 +2,18 @@ package com.aplana.apiPractice;
 
 import com.aplana.apiPractice.accounts.AccountService;
 import com.aplana.apiPractice.accounts.UserProfile;
-import com.aplana.apiPractice.debugServlets.RequestsServlet;
-import com.aplana.apiPractice.debugServlets.SessionsServlet;
-import com.aplana.apiPractice.debugServlets.SignUpServlet;
+import com.aplana.apiPractice.servlets.ProfileServlet;
+import com.aplana.apiPractice.servlets.debugServlets.RequestsServlet;
+import com.aplana.apiPractice.servlets.debugServlets.SessionsServlet;
+import com.aplana.apiPractice.servlets.debugServlets.SignUpServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.log.Log;
+import org.eclipse.jetty.util.log.Logger;
 
 import javax.xml.ws.Endpoint;
 import java.io.*;
@@ -19,10 +23,13 @@ import java.util.stream.Collectors;
 
 public class Main {
 
+    private static final Logger LOG = Log.getLogger(Main.class);
+
     public static void main(String[] args) throws Exception {
+        LOG.setDebugEnabled(true);
         Map<String, String> cfg = readConfig();
 
-        startWSDLServer(cfg.get("servers.wsdl.ip"), Integer.parseInt(cfg.get("servers.wsdl.port")));
+        startWSDLServer(cfg.get("servers.wsdl.ip"), cfg.get("servers.wsdl.port"));
         startRestfulServer(Integer.parseInt(cfg.get("servers.rest.port")));
     }
 
@@ -36,29 +43,32 @@ public class Main {
         Server server = new Server(port);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-//        ResourceHandler resource_handler = new ResourceHandler();
-//        resource_handler.setResourceBase("templates");
+        ResourceHandler resource_handler = new ResourceHandler();
+        resource_handler.setResourceBase("templates");
+//        resource_handler.setWelcomeFiles(new String[]{"index.html"});//.setResourceBase("templates");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{context});
+        handlers.setHandlers(new Handler[]{resource_handler, context});
 
         server.setHandler(handlers);
 
-        context.addServlet(new ServletHolder(new RequestsServlet()), "");
-        context.addServlet(new ServletHolder(new SessionsServlet(accountService)), "/signin");
-        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/signup");
+        // DEBUG servlets
+        context.addServlet(new ServletHolder(new RequestsServlet()), "/gui");
+        context.addServlet(new ServletHolder(new SessionsServlet(accountService)), "/auth");
+        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/registration");
+
+        context.addServlet(new ServletHolder(new ProfileServlet()), "/rest/profiles");
 
         server.start();
         server.join();
     }
 
-    private static void startWSDLServer(String ip, int port) {
-        String endpointAdress = "http://" + ip + ":" + port + "/wss/hello";
+    private static void startWSDLServer(String ip, String port) {
+        String endpointAdress = "http://" + ip + ":" + port + "/wss/profiles";
         Endpoint.publish(endpointAdress, new SoapWSImpl());
-        System.out.println("WSDL endpoint started at: " + endpointAdress);
-//        String endpointDocAdress = "http://" + ip + ":" + port + "/doc.asmx";
-//        Endpoint.publish(endpointDocAdress, new SoapDocWSImpl());
-//        System.out.println("WSDL endpoint started at: " + endpointDocAdress);
+        LOG.info("WSDL endpoint started at: " + endpointAdress);
+        String endpoint2 = "http://" + ip + ":" + port + "/wss/provider";
+        Endpoint.publish(endpoint2, new SoapProvider());
     }
 
     private static Map<String, String> readConfig() throws IOException {
@@ -68,8 +78,8 @@ public class Main {
         serverCfg.load(reader);
         Map<String, String> mapCfg = serverCfg.entrySet().stream()
                 .collect(Collectors.toMap(e -> String.valueOf(e.getKey()), e -> String.valueOf(e.getValue())));
-        System.out.println("Config loaded:");
-        mapCfg.forEach((key, value) -> System.out.println(key + " = " + value));
+        LOG.info("Config loaded:");
+        mapCfg.forEach((key, value) -> LOG.info(key + " = " + value));
         return mapCfg;
     }
 }

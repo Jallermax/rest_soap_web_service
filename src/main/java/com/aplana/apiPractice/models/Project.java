@@ -1,10 +1,11 @@
-package models;
+package com.aplana.apiPractice.models;
 
 import com.aplana.apiPractice.ProfileManager;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Project {
+public class Project implements Serializable{
 
     /** Название проекта*/
     private String name;

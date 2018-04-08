@@ -1,12 +1,14 @@
 package com.aplana.apiPractice;
 
-import models.Profile;
+import com.aplana.apiPractice.models.Profile;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.xml.ws.Service;
+import javax.xml.ws.ServiceMode;
+import javax.xml.ws.WebServiceProvider;
 import java.util.List;
 import java.util.UUID;
 

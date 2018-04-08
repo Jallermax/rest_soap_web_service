@@ -1,6 +1,6 @@
 package com.aplana.apiPractice;
 
-import models.Profile;
+import com.aplana.apiPractice.models.Profile;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,6 @@
-package com.aplana.apiPractice.debugServlets;
+package com.aplana.apiPractice.servlets.debugServlets;
 
+import com.aplana.apiPractice.ProfileManager;
 import com.aplana.apiPractice.templater.PageGenerator;
 
 import javax.servlet.ServletException;
@@ -33,21 +34,10 @@ public class RequestsServlet extends HttpServlet {
         }
         pageVariables.put("message", message == null ? "" : message);
 
-        response.getWriter().println(PageGenerator.updatePage(request, response, message == null ? "" : message));
-    }
-
-    @Override
-    protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doHead(req, resp);
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doDelete(req, resp);
+        if ("getProfileList".equals(message)) {
+            response.getWriter().println(ProfileManager.getInstance().getProfiles().values().toString());
+        } else {
+            response.getWriter().println(PageGenerator.updatePage(request, response, message == null ? "" : message));
+        }
     }
 }

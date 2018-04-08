@@ -11,7 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class PageGenerator {
@@ -53,6 +57,17 @@ public class PageGenerator {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
         Map<String, Object> pageVariables = new SafeHashMap();
+        String fullUrl = request.getMethod() + " " + request.getRequestURL();
+        List<String> params = new ArrayList<>();
+        request.getParameterMap().forEach((key, value) -> params.add(key + "=" + Arrays.toString(value).substring(1, Arrays.toString(value).length()-1)));
+        if (!params.isEmpty()) {
+            fullUrl += "?";
+            for (String param : params) {
+                fullUrl += param + "&";
+            }
+            fullUrl = fullUrl.substring(0, fullUrl.length()-1);
+        }
+        pageVariables.put("request", fullUrl + " HTTP/1.1");
         pageVariables.put("method", request.getMethod());
         pageVariables.put("URL", request.getRequestURL().toString());
         pageVariables.put("pathInfo", request.getPathInfo());

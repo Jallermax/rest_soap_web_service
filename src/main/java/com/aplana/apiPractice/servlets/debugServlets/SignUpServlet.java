@@ -1,4 +1,4 @@
-package com.aplana.apiPractice.debugServlets;
+package com.aplana.apiPractice.servlets.debugServlets;
 
 import com.aplana.apiPractice.templater.PageGenerator;
 import com.google.gson.Gson;

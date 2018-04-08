@@ -1,17 +1,24 @@
-package models;
+package com.aplana.apiPractice.models;
 
 import com.aplana.apiPractice.ProfileManager;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Profile {
+@XmlRootElement(name = "Profile")
+//@XmlType(propOrder = {"id", "name", "secondName", "surName", "birthday", "email", "phone",
+//        "startDate", "position", "isProbationFinished", "projectList"})
+public class Profile implements Serializable{
 
     /** Имя сотрудника*/
 //    @XmlElement(required = true)
     private String name;
     /** Фамилия сотрудника*/
+//    @XmlElement(required = true)
     private String surName;
     /** Отчество сотрудника*/
     private String secondName;
@@ -21,6 +28,7 @@ public class Profile {
 //    @XmlElement(type = Long.class)
     private String phone;
     /** email*/
+//    @XmlElement(required = true)
     private String email;
     /** должность*/
     private String position;
@@ -38,13 +46,14 @@ public class Profile {
     public Profile() {
         projects = new HashMap<>();
         id = ProfileManager.getInstance().getNewId();
+        startDate = Calendar.getInstance().getTime();
         Project project1 = new Project();
         project1.setName("First");
         Project project2 = new Project();
         project2.setName("Second");
         projects.put(project1.getId(), project1);
         projects.put(project2.getId(), project2);
-        projectList = getProjectList();
+        projectList = new ArrayList<>(projects.values());
     }
 
     public String getName() {
@@ -126,13 +135,6 @@ public class Profile {
 
     public Date getStartDate() {
         return startDate;
-    }
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-    public Profile withStartDate(Date startDate) {
-        this.startDate = startDate;
-        return this;
     }
 
     public Boolean getProbationFinished() {

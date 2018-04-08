@@ -1,9 +1,10 @@
-package com.aplana.apiPractice.debugServlets;
+package com.aplana.apiPractice.servlets.debugServlets;
 
 import com.aplana.apiPractice.accounts.UserProfile;
 import com.aplana.apiPractice.templater.PageGenerator;
 import com.google.gson.Gson;
 import com.aplana.apiPractice.accounts.AccountService;
+import org.eclipse.jetty.server.Request;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,6 +75,7 @@ public class SessionsServlet extends HttpServlet {
     //sign out
     public void doDelete(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
+        ((Request)request).setMethod("DELETE"); //Dirty hack because of html lack of actions
         String sessionId = request.getSession().getId();
         UserProfile profile = accountService.getUserBySessionId(sessionId);
         if (profile == null) {
