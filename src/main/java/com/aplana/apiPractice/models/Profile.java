@@ -36,24 +36,17 @@ public class Profile implements Serializable{
     private Date startDate;
     /** Сотрудник завершил испытательный срок*/
     private Boolean isProbationFinished;
+//    /** Проекты*/
+//    private Map<Long, Project> projects;
     /** Проекты*/
-    private Map<Long, Project> projects;
-    /** Проекты*/
-    private List<Project> projectList;
+    private List<Project> projectList = new ArrayList<>();
     /** Id записи*/
     private long id;
 
     public Profile() {
-        projects = new HashMap<>();
         id = ProfileManager.getInstance().getNewId();
         startDate = Calendar.getInstance().getTime();
-        Project project1 = new Project();
-        project1.setName("First");
-        Project project2 = new Project();
-        project2.setName("Second");
-        projects.put(project1.getId(), project1);
-        projects.put(project2.getId(), project2);
-        projectList = new ArrayList<>(projects.values());
+        updateDynamicParams();
     }
 
     public String getName() {
@@ -147,17 +140,16 @@ public class Profile implements Serializable{
         return false;
     }
 
-    public Map<Long, Project> getProjects() {
-        return projects;
-    }
     public List<Project> getProjectList() {
         return projectList;
     }
     public void addProject(Project project) {
-        this.projects.put(project.getId(), project);
+        this.projectList.add(project);
+        updateDynamicParams();
     }
     public Profile withProject(Project project) {
-        this.projects.put(project.getId(), project);
+        this.projectList.add(project);
+        updateDynamicParams();
         return this;
     }
 
@@ -165,4 +157,18 @@ public class Profile implements Serializable{
         return id;
     }
 
+    private void updateStartDate() {
+        startDate = projectList.stream().map(Project::getStartDate)
+                .min(Comparator.nullsLast(Comparator.naturalOrder()))
+                .orElse(startDate);
+    }
+
+    public void updateDynamicParams() {
+        updateStartDate();
+        isProbationFinished = getProbationFinished();
+    }
+
+    public String getFullName() {
+        return surName + " " + name + (secondName != null ? "" + secondName : "");
+    }
 }
