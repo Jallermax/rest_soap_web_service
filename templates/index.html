@@ -4,10 +4,13 @@
     <meta charset="UTF-8"/>
     <title>REST API WS: DOC</title>
 </head>
-<p><b>Documentation</b></p>
 
-<p><a href="/rest/profiles">/rest/profiles</a> [GET(Long id|null), POST, PUT, DELETE]</p>
-Example post json: {"name":"Maxim","surName":"Mashnev","secondName":"Alexandrovich","phone":"+79267591307","email":"sample@gmail.com","position":"Senior QA","projectList":[{"name":"Second"},{"name":"First"}]}
+<p><b>REST API Documentation</b></p>
+
+<p><a href="/rest/profiles">/rest/profiles</a> [GET(Long id|null), POST, PUT, DELETE(Long id)]</p>
+Example post json:
+{"name":"Maxim","surName":"Mashnev","secondName":"Alexandrovich","phone":"+79267591307","email":"sample@gmail.com","position":"Senior
+QA","projectList":[{"name":"Second"},{"name":"First"}]}
 
 <p><b>Debug methods</b></p>
 
@@ -16,6 +19,9 @@ Example post json: {"name":"Maxim","surName":"Mashnev","secondName":"Alexandrovi
 <p><a href="/auth">/auth</a> [GET(Redirect to DELETE), POST, DELETE]</p>
 
 <p><a href="/registration">/registration</a> [POST(String login, String password]</p>
+
+
+<p><b>SOAP/WSDL Documentation:</b> http://wsdlIp:wsdlPort/wss/profiles?wsdl</p>
 
 </body>
 </html>

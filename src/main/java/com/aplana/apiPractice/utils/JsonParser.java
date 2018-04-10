@@ -5,6 +5,15 @@ import com.google.gson.GsonBuilder;
 
 public class JsonParser {
 
+    public static <T> T parseJson(String jsonStr, Class<T> clazz) {
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(jsonStr, clazz);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public static String createJson(Object jsonObject, boolean isPretty) {
         String jsonStr;
         if (isPretty) {

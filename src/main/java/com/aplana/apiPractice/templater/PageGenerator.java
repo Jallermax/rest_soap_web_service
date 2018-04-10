@@ -1,9 +1,12 @@
 package com.aplana.apiPractice.templater;
 
+import com.aplana.apiPractice.Main;
+import com.aplana.apiPractice.utils.Ipify;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import com.aplana.apiPractice.utils.SafeHashMap;
+import org.eclipse.jetty.util.log.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,11 +18,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class PageGenerator {
-    private static final String HTML_DIR = "templates";
+    private static String HTML_DIR = "templates";
+
+    static {
+        try {
+            HTML_DIR = Main.readConfig().getOrDefault("templateFolder", HTML_DIR);
+        } catch (IOException e) {
+            Log.getLog().debug(e);
+        }
+    }
 
     private static PageGenerator pageGenerator;
     private final Configuration cfg;
@@ -73,6 +83,7 @@ public class PageGenerator {
         pageVariables.put("pathInfo", request.getPathInfo());
         pageVariables.put("sessionId", request.getSession().getId());
         pageVariables.put("parameters", request.getParameterMap().toString());
+        pageVariables.put("publicIp", Ipify.getPublicIp());
         return pageVariables;
     }
 }

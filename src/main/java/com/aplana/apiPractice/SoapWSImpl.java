@@ -1,5 +1,6 @@
 package com.aplana.apiPractice;
 
+import com.aplana.apiPractice.exceptions.ElementExistException;
 import com.aplana.apiPractice.models.Profile;
 
 import javax.jws.WebService;
@@ -26,6 +27,7 @@ public class SoapWSImpl implements SoapWS {
         return UUID.randomUUID();
     }
 
+
     @Override
     public List<Profile> getProfileList() {
         return new ArrayList<>(ProfileManager.getInstance().getProfiles().values());
@@ -38,13 +40,18 @@ public class SoapWSImpl implements SoapWS {
 
     @Override
     public String addProfile(Profile profile) {
-        ProfileManager.getInstance().addNewProfile(profile);
+        try {
+            ProfileManager.getInstance().addNewProfile(profile);
+        } catch (ElementExistException e) {
+            return e.getMessage();
+        }
         return "Profile with id: " + profile.getId() +" was successfully created.";
     }
 
     @Override
     public String removeProfile(Long id) {
-        ProfileManager.getInstance().removeProfile(id);
-        return "Profile with id: " + id + " was removed";
+        final Profile removedProfile = ProfileManager.getInstance().removeProfile(id);
+        return removedProfile == null ? "Profile with id: " + id + " not found!"
+                : "Profile with id: " + removedProfile.getId() + "(" + removedProfile.getFullName() + ") was removed";
     }
 }
