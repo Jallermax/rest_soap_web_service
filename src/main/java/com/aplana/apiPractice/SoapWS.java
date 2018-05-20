@@ -1,5 +1,6 @@
 package com.aplana.apiPractice;
 
+import com.aplana.apiPractice.models.AddProfileRq;
 import com.aplana.apiPractice.models.Profile;
 
 import javax.jws.WebMethod;
@@ -22,16 +23,13 @@ public interface SoapWS {
     String getUniqueKey();
 
     @WebMethod
-    UUID getUUID(@WebParam(name = "param") List<String> list);
-
-    @WebMethod
     List<Profile> getProfileList();
 
     @WebMethod
     Profile getProfile(Long id);
 
     @WebMethod
-    String addProfile(@WebParam(name = "Profile") Profile profile);
+    String addProfile(@WebParam(name = "ProfileRq") AddProfileRq profileRq);
 
     @WebMethod
     String removeProfile (Long id);

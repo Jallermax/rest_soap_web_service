@@ -1,6 +1,7 @@
 package com.aplana.apiPractice;
 
 import com.aplana.apiPractice.exceptions.ElementExistException;
+import com.aplana.apiPractice.models.AddProfileRq;
 import com.aplana.apiPractice.models.Profile;
 
 import javax.jws.WebService;
@@ -21,12 +22,6 @@ public class SoapWSImpl implements SoapWS {
         return UUID.randomUUID().toString();
     }
 
-    @Override
-    public UUID getUUID(List<String> list) {
-        System.out.println(list.toString());
-        return UUID.randomUUID();
-    }
-
 
     @Override
     public List<Profile> getProfileList() {
@@ -39,7 +34,11 @@ public class SoapWSImpl implements SoapWS {
     }
 
     @Override
-    public String addProfile(Profile profile) {
+    public String addProfile(AddProfileRq profileRq) {
+        if (profileRq == null) {
+            return "Incorrect request!";
+        }
+        Profile profile = new Profile(profileRq);
         try {
             ProfileManager.getInstance().addNewProfile(profile);
         } catch (ElementExistException e) {

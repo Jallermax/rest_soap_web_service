@@ -2,51 +2,80 @@ package com.aplana.apiPractice.models;
 
 import com.aplana.apiPractice.ProfileManager;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Profile_Type", propOrder = {
+        "id",
+        "surName",
+        "name",
+        "secondName",
+        "birthday",
+        "phone",
+        "email",
+        "position",
+        "startDate",
+        "isProbationFinished",
+        "projectList"
+
+})
 @XmlRootElement(name = "Profile")
-//@XmlType(propOrder = {"id", "name", "secondName", "surName", "birthday", "email", "phone",
-//        "startDate", "position", "isProbationFinished", "projectList"})
 public class Profile implements Serializable{
 
+    private long id;
     /** Имя сотрудника*/
-//    @XmlElement(required = true)
+    @XmlElement(name = "Name", required = true)
     private String name;
     /** Фамилия сотрудника*/
-//    @XmlElement(required = true)
+    @XmlElement(name = "SurName", required = true)
     private String surName;
     /** Отчество сотрудника*/
+    @XmlElement(name = "SecondName")
     private String secondName;
     /** Дата рождения*/
+    @XmlElement(name = "Birthday")
     private Date birthday;
     /** Телефон*/
-//    @XmlElement(type = Long.class)
+    @XmlElement(name = "Phone", type = Long.class)
     private String phone;
     /** email*/
-//    @XmlElement(required = true)
+    @XmlElement(name = "E-mail", required = true)
     private String email;
     /** должность*/
+    @XmlElement(name = "Position")
     private String position;
     /** Дата начала работы в компании*/
+    @XmlElement(name = "StartDate")
     private Date startDate;
     /** Сотрудник завершил испытательный срок*/
+    @XmlElement(name = "ProbationFinishedFlag")
     private Boolean isProbationFinished;
-//    /** Проекты*/
-//    private Map<Long, Project> projects;
     /** Проекты*/
+    @XmlElement(name = "Projects")
     private List<Project> projectList = new ArrayList<>();
     /** Id записи*/
-    private long id;
 
     public Profile() {
         id = ProfileManager.getInstance().getNewId();
         startDate = Calendar.getInstance().getTime();
         updateDynamicParams();
+    }
+
+    public Profile(AddProfileRq profileRq) {
+        if (profileRq == null) return;
+        this.name = profileRq.getName();
+        this.surName = profileRq.getSurName();
+        this.secondName = profileRq.getSecondName();
+        this.birthday = profileRq.getBirthday();
+        this.email = profileRq.getEmail();
+        this.phone = profileRq.getPhone();
+        this.position = profileRq.getPosition();
+        this.projectList = profileRq.getProjectList() != null
+                ? profileRq.getProjectList()
+                : projectList;
     }
 
     public String getName() {
@@ -158,7 +187,9 @@ public class Profile implements Serializable{
     }
 
     private void updateStartDate() {
-        startDate = projectList.stream().map(Project::getStartDate)
+        startDate = projectList.stream()
+                .filter(project -> project.getStartDate() != null)
+                .map(Project::getStartDate)
                 .min(Comparator.nullsLast(Comparator.naturalOrder()))
                 .orElse(startDate);
     }

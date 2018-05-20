@@ -1,6 +1,7 @@
 package com.aplana.apiPractice.templater;
 
 import com.aplana.apiPractice.Main;
+import com.aplana.apiPractice.utils.ConfigReader;
 import com.aplana.apiPractice.utils.Ipify;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -21,15 +22,7 @@ import java.util.Map;
 
 
 public class PageGenerator {
-    private static String HTML_DIR = "templates";
-
-    static {
-        try {
-            HTML_DIR = Main.readConfig().getOrDefault("templateFolder", HTML_DIR);
-        } catch (IOException e) {
-            Log.getLog().debug(e);
-        }
-    }
+    private static String HTML_DIR = ConfigReader.getInstance().getTemplateFolder();
 
     private static PageGenerator pageGenerator;
     private final Configuration cfg;

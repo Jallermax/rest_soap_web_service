@@ -1,7 +1,9 @@
 package com.aplana.apiPractice.servlets;
 
 import com.aplana.apiPractice.ProfileManager;
+import com.aplana.apiPractice.exceptions.DataValidation;
 import com.aplana.apiPractice.exceptions.ElementExistException;
+import com.aplana.apiPractice.models.AddProfileRq;
 import com.aplana.apiPractice.models.Profile;
 import com.aplana.apiPractice.utils.JsonParser;
 import org.eclipse.jetty.util.log.Log;
@@ -14,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.aplana.apiPractice.ProfileManager.idTypeRegex;
+import static com.aplana.apiPractice.utils.Helpers.logException;
 import static com.aplana.apiPractice.utils.JsonParser.createJson;
 
 public class ProfileServlet extends HttpServlet{
@@ -67,9 +71,9 @@ public class ProfileServlet extends HttpServlet{
 
         String rqJson = getJsonContent(req);
 
-        Profile profile;
+        AddProfileRq profileRq;
         try {
-            profile = JsonParser.parseJson(rqJson, Profile.class);
+            profileRq = JsonParser.parseJson(rqJson, AddProfileRq.class);
         } catch (Exception e) {
             //TODO Should I set text/html for fails?
             resp.setContentType(TEXT_HTML);
@@ -79,11 +83,20 @@ public class ProfileServlet extends HttpServlet{
         }
         LOG.debug("JSON: " + JsonParser.createJson(rqJson, true));
         try {
+            profileRq.validate();
+        } catch (DataValidation e) {
+            resp.setContentType(TEXT_HTML);
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().print(logException(e, true));
+            return;
+        }
+        Profile profile = new Profile(profileRq);
+        try {
             ProfileManager.getInstance().addNewProfile(profile);
         } catch (ElementExistException e) {
             resp.setContentType(TEXT_HTML);
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
-            resp.getWriter().print(e.getCause());
+            resp.getWriter().print(Arrays.toString(e.getStackTrace()));
             return;
         }
         resp.getWriter().print("Added new profile:\n" + JsonParser.createJson(ProfileManager.getInstance().getProfile(profile.getId()), true));

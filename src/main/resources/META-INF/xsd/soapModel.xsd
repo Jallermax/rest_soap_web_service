@@ -1,0 +1,108 @@
+<xs:schema xmlns:tns="http://apiPractice.aplana.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://apiPractice.aplana.com/">
+    <xs:element name="AddProfileRq" type="tns:ProfileRq_Type"/>
+    <xs:element name="Profile" type="tns:Profile_Type"/>
+    <xs:element name="addProfile" type="tns:addProfile"/>
+    <xs:element name="addProfileResponse" type="tns:addProfileResponse"/>
+    <xs:element name="getProfile" type="tns:getProfile"/>
+    <xs:element name="getProfileList" type="tns:getProfileList"/>
+    <xs:element name="getProfileListResponse" type="tns:getProfileListResponse"/>
+    <xs:element name="getProfileResponse" type="tns:getProfileResponse"/>
+    <xs:element name="getUniqueKey" type="tns:getUniqueKey"/>
+    <xs:element name="getUniqueKeyResponse" type="tns:getUniqueKeyResponse"/>
+    <xs:element name="getWelcomeMessage" type="tns:getWelcomeMessage"/>
+    <xs:element name="getWelcomeMessageResponse" type="tns:getWelcomeMessageResponse"/>
+    <xs:element name="removeProfile" type="tns:removeProfile"/>
+    <xs:element name="removeProfileResponse" type="tns:removeProfileResponse"/>
+    <xs:complexType name="getUniqueKey">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:complexType name="getUniqueKeyResponse">
+        <xs:sequence>
+            <xs:element name="return" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getProfile">
+        <xs:sequence>
+            <xs:element name="arg0" type="xs:long" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getProfileResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:Profile_Type" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Profile_Type">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="SurName" type="xs:string"/>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="SecondName" type="xs:string" minOccurs="0"/>
+            <xs:element name="Birthday" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="Phone" type="xs:long" minOccurs="0"/>
+            <xs:element name="E-mail" type="xs:string"/>
+            <xs:element name="Position" type="xs:string" minOccurs="0"/>
+            <xs:element name="StartDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="ProbationFinishedFlag" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="Projects" type="tns:Project" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Project">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Description" type="xs:string" minOccurs="0"/>
+            <xs:element name="StartDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="EndDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="id" type="xs:long" maxOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getProfileList">
+        <xs:sequence/>
+    </xs:complexType>
+    <xs:complexType name="getProfileListResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:Profile_Type" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="removeProfile">
+        <xs:sequence>
+            <xs:element name="arg0" type="xs:long" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="removeProfileResponse">
+        <xs:sequence>
+            <xs:element name="return" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getWelcomeMessage">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="getWelcomeMessageResponse">
+        <xs:sequence>
+            <xs:element name="return" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addProfile">
+        <xs:sequence>
+            <xs:element name="ProfileRq" type="tns:ProfileRq_Type" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ProfileRq_Type">
+        <xs:sequence>
+            <xs:element name="SurName" type="xs:string"/>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="SecondName" type="xs:integer" minOccurs="0"/>
+            <xs:element name="Birthday" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="Phone" type="xs:long" minOccurs="0"/>
+            <xs:element name="E-mail" type="xs:string"/>
+            <xs:element name="Position" type="xs:string" minOccurs="0"/>
+            <xs:element name="Projects" type="tns:Project" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="addProfileResponse">
+        <xs:sequence>
+            <xs:element name="return" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,19 +1,36 @@
 package com.aplana.apiPractice.models;
 
 import com.aplana.apiPractice.ProfileManager;
+import com.aplana.apiPractice.exceptions.DataValidation;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Date;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Project", propOrder = {
+        "name",
+        "description",
+        "startDate",
+        "endDate"
+})
 public class Project implements Serializable{
 
     /** Название проекта*/
+    @XmlElement(name = "Name", required = true)
     private String name;
     /** Описание проекта*/
+    @XmlElement(name = "Description")
     private String description;
     /** Дата начала работы на проекте*/
+    @XmlElement(name = "StartDate")
     private Date startDate;
     /** Дата окончания работы на проекте*/
+    @XmlElement(name = "EndDate")
     private Date endDate;
     /** Id записи*/
     private long id;
@@ -66,8 +83,19 @@ public class Project implements Serializable{
         return this;
     }
 
-
     public long getId() {
         return id;
+    }
+
+    public void validate() throws DataValidation {
+        try {
+            for (Field field : this.getClass().getDeclaredFields()) {
+                if (field.get(this) == null && field.getAnnotation(XmlElement.class).required()) {
+                    throw new DataValidation("Required field " + field.getName() + " = null");
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

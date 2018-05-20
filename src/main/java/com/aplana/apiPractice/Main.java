@@ -9,6 +9,7 @@ import com.aplana.apiPractice.servlets.ProfileServlet;
 import com.aplana.apiPractice.servlets.debugServlets.DebugGuiServlet;
 import com.aplana.apiPractice.servlets.debugServlets.SessionsServlet;
 import com.aplana.apiPractice.servlets.debugServlets.SignUpServlet;
+import com.aplana.apiPractice.utils.ConfigReader;
 import com.aplana.apiPractice.utils.Ipify;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -32,12 +33,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOG.setDebugEnabled(true);
-        Map<String, String> cfg = readConfig();
+        ConfigReader config = ConfigReader.getInstance();
         initializeTestData();
         LOG.info(Ipify.getPublicIp());
 
-        startWSDLServer(cfg.getOrDefault("servers.wsdl.ip", "0.0.0.0"), cfg.get("servers.wsdl.port"));
-        startRestfulServer(Integer.parseInt(cfg.get("servers.rest.port")), cfg.getOrDefault("templateFolder", "templates"));
+        startWSDLServer(config.getWsdlIp(), config.getWsdlPort());
+        startRestfulServer(Integer.parseInt(config.getRestPort()), config.getTemplateFolder());
     }
 
     private static void initializeTestData() {
