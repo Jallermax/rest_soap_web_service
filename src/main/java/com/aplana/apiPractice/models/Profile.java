@@ -1,13 +1,8 @@
 package com.aplana.apiPractice.models;
 
-import com.aplana.apiPractice.ProfileManager;
-
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @XmlRootElement(name = "Profile")
 //@XmlType(propOrder = {"id", "name", "secondName", "surName", "birthday", "email", "phone",
@@ -39,12 +34,30 @@ public class Profile implements Serializable{
 //    /** Проекты*/
 //    private Map<Long, Project> projects;
     /** Проекты*/
+//    private String projects;
     private List<Project> projectList = new ArrayList<>();
     /** Id записи*/
     private long id;
 
     public Profile() {
-        id = ProfileManager.getInstance().getNewId();
+        Random random = new Random();
+        id = random.nextLong();
+        startDate = Calendar.getInstance().getTime();
+        updateDynamicParams();
+    }
+
+    public Profile(long id, Profile profile) {
+        this.name = profile.name;
+        this.surName = profile.surName;
+        this.secondName = profile.secondName;
+        this.birthday = profile.birthday;
+        this.phone = profile.phone;
+        this.email = profile.email;
+        this.position = profile.position;
+        this.startDate = profile.startDate;
+        this.projectList = profile.projectList;
+
+        this.id = id;
         startDate = Calendar.getInstance().getTime();
         updateDynamicParams();
     }
@@ -153,14 +166,14 @@ public class Profile implements Serializable{
         return this;
     }
 
-    public long getId() {
-        return id;
-    }
-
     private void updateStartDate() {
         startDate = projectList.stream().map(Project::getStartDate)
                 .min(Comparator.nullsLast(Comparator.naturalOrder()))
                 .orElse(startDate);
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void updateDynamicParams() {
@@ -169,6 +182,16 @@ public class Profile implements Serializable{
     }
 
     public String getFullName() {
-        return surName + " " + name + (secondName != null ? "" + secondName : "");
+        return surName + " " + name + (secondName != null ? " " + secondName : "");
+    }
+
+    public boolean valid() {
+        return name != null && name.matches("[A-z,А-я]{2,}")
+                && surName != null && surName.matches("[A-z,А-я]{2,}")
+                && (secondName == null || secondName.matches("[A-z,А-я]{2,}"))
+                && (birthday == null || birthday.before(Calendar.getInstance().getTime()))
+                && (phone == null || phone.matches("[\\d,\\W]{10,18}"))
+                && (email == null || email.matches("\\S+@\\S+\\.\\S{2,}"))
+                && (startDate == null || startDate.before(Calendar.getInstance().getTime()));
     }
 }

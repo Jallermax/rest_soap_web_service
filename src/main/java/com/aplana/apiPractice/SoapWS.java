@@ -18,11 +18,11 @@ public interface SoapWS {
     @WebMethod
     String getWelcomeMessage(@WebParam(name = "Name") String name);
 
-    @WebMethod
-    String getUniqueKey();
-
-    @WebMethod
-    UUID getUUID(@WebParam(name = "param") List<String> list);
+//    @WebMethod
+//    String getUniqueKey();
+//
+//    @WebMethod
+//    UUID getUUID(@WebParam(name = "param") List<String> list);
 
     @WebMethod
     List<Profile> getProfileList();
@@ -35,4 +35,7 @@ public interface SoapWS {
 
     @WebMethod
     String removeProfile (Long id);
+
+    @WebMethod
+    String getTaskKey ();
 }

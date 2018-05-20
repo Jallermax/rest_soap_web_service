@@ -1,9 +1,8 @@
 package com.aplana.apiPractice.models;
 
-import com.aplana.apiPractice.ProfileManager;
-
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Random;
 
 public class Project implements Serializable{
 
@@ -19,7 +18,9 @@ public class Project implements Serializable{
     private long id;
 
     public Project() {
-        this.id = ProfileManager.getInstance().getNewId();
+//        this.id = ProfileManager.getInstance("soapSession").getNewId();
+        Random random = new Random();
+        this.id = random.nextLong();
     }
 
     public String getName() {

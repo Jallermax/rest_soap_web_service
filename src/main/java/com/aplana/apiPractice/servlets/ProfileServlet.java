@@ -37,10 +37,10 @@ public class ProfileServlet extends HttpServlet{
 
         String response;
         if (profileId == null || profileId.isEmpty()) {
-            ArrayList<Profile> profiles = new ArrayList<>(ProfileManager.getInstance().getProfiles().values());
+            ArrayList<Profile> profiles = new ArrayList<>(ProfileManager.getInstance(req.getRemoteAddr()).getProfiles().values());
             response = profiles.isEmpty() ? "Profile list is empty!" : createJson(profiles, prettyJson);
         } else if (profileId.matches(idTypeRegex)){
-            Profile profile = ProfileManager.getInstance().getProfile(Long.valueOf(profileId));
+            Profile profile = ProfileManager.getInstance(req.getRemoteAddr()).getProfile(Long.valueOf(profileId));
             response = createJson(profile, prettyJson);
             if (profile == null) {
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -57,7 +57,7 @@ public class ProfileServlet extends HttpServlet{
     @Override
     /** Обновление существующего профиля*/
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        //TODO
     }
 
     @Override
@@ -78,15 +78,22 @@ public class ProfileServlet extends HttpServlet{
             return;
         }
         LOG.debug("JSON: " + JsonParser.createJson(rqJson, true));
+        Long id;
         try {
-            ProfileManager.getInstance().addNewProfile(profile);
+            id = ProfileManager.getInstance(req.getRemoteAddr()).addNewProfile(profile);
+            if (id == null) {
+                resp.setContentType(TEXT_HTML);
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().print("Validation failed. Profile wasn't created. Use valid values.");
+                return;
+            }
         } catch (ElementExistException e) {
             resp.setContentType(TEXT_HTML);
             resp.setStatus(HttpServletResponse.SC_CONFLICT);
-            resp.getWriter().print(e.getCause());
+            resp.getWriter().print(e.getMessage());
             return;
         }
-        resp.getWriter().print("Added new profile:\n" + JsonParser.createJson(ProfileManager.getInstance().getProfile(profile.getId()), true));
+        resp.getWriter().print("Added new profile:\n" + JsonParser.createJson(ProfileManager.getInstance(req.getRemoteAddr()).getProfile(id), true));
     }
 
     @Override
@@ -97,7 +104,7 @@ public class ProfileServlet extends HttpServlet{
         String responseMsg;
         String profileId = req.getParameter("id");
         if (profileId != null && profileId.matches(idTypeRegex)) {
-            final Profile removedProfile = ProfileManager.getInstance().removeProfile(Long.valueOf(profileId));
+            final Profile removedProfile = ProfileManager.getInstance(req.getRemoteAddr()).removeProfile(Long.valueOf(profileId));
             if (removedProfile == null) {
                 resp.setContentType(TEXT_HTML);
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
