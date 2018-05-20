@@ -1,6 +1,5 @@
 package com.aplana.apiPractice.models;
 
-import com.aplana.apiPractice.ProfileManager;
 import com.aplana.apiPractice.exceptions.DataValidation;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -10,6 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.Random;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Project", propOrder = {
@@ -36,7 +36,9 @@ public class Project implements Serializable{
     private long id;
 
     public Project() {
-        this.id = ProfileManager.getInstance().getNewId();
+//        this.id = ProfileManager.getInstance("soapSession").getNewId();
+        Random random = new Random();
+        this.id = random.nextLong();
     }
 
     public String getName() {

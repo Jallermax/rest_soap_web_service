@@ -7,10 +7,15 @@
 
 <p><b>REST API Documentation</b></p>
 
+<p><a href="/rest/task_key">/rest/task_key</a> [GET, POST]</p>
+
 <p><a href="/rest/profiles">/rest/profiles</a> [GET(Long id|null), POST, PUT, DELETE(Long id)]</p>
+All profiles exist only during current session! Site will reset state on next connection.
+
 Example post json:
-{"name":"Maxim","surName":"Mashnev","secondName":"Alexandrovich","phone":"+79267591307","email":"sample@gmail.com","position":"Senior
-QA","projectList":[{"name":"Second"},{"name":"First"}]}
+{"name":"Pavel","surName":"Sinitcin","secondName":"Alexandrovich","phone":"+792096219035","email":"sample@gmail.com","position":"Senior
+QA engineer","projectList":[{"name":"Second"},{"name":"First"}]}
+
 
 <p><b>Debug methods</b></p>
 
