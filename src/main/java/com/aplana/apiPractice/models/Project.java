@@ -13,6 +13,7 @@ import java.util.Random;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Project", propOrder = {
+        "id",
         "name",
         "description",
         "startDate",

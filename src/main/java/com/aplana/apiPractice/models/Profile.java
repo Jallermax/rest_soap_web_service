@@ -51,8 +51,6 @@ public class Profile implements Serializable{
     @XmlElement(name = "ProbationFinishedFlag")
     private Boolean isProbationFinished;
     /** Проекты*/
-    @XmlElement(name = "Projects")
-//    private String projects;
     private List<Project> projectList = new ArrayList<>();
     /** Id записи*/
 
