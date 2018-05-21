@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskValidation {
     private static final Logger LOG = Log.getLogger(TaskValidation.class);
-    private static final int threshold = 2;
+    private static final int threshold = 3;
     private ServiceType serviceType;
 
     public TaskValidation(ServiceType serviceType) {
