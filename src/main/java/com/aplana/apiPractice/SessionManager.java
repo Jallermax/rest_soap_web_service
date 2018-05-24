@@ -21,6 +21,8 @@ public class SessionManager {
     }
 
     public boolean isOld() {
-        return LocalDateTime.now().minusDays(7).isAfter(creationDate);
+        return SoapWSImpl.soapSession.equals(sessionId)
+                ? LocalDateTime.now().minusHours(1).isAfter(creationDate)
+                : LocalDateTime.now().minusDays(7).isAfter(creationDate);
     }
 }

@@ -8,26 +8,41 @@
 <p><b>REST API Documentation</b></p>
 
 <p><a href="/rest/task_key">/rest/task_key</a> [GET, POST]</p>
+<ul>
+    <li>GET - get task description</li>
+    <li>POST - get key for moodle</li>
+</ul>
+<p><a href="/rest/profiles">/rest/profiles</a> [GET, POST, DELETE]</p>
+<ul>
+    <li>GET - get list of profiles or specific profile by id
+        <ul>
+            <li>Parameters: <ul><li><u>Boolean pretty<i>[optional]</i></u> (for pretty json print); </li><li><u>Long id<i>[optional]</i></u> (for getting specific profile);</ul></li></li>
+            <li>Examle: <a href="/rest/profiles?id=100001&pretty=true">/rest/profiles?id=100001&pretty=true</a></li>
+        </ul></li><br/>
+    <li>POST - add new profile in json format from request body
+        <ul>
+            <li>Example POST json body:
+                {"name":"Pavel","surName":"Sinitcin","secondName":"Alexandrovich","phone":"+792096219035","email":"sample@gmail.com","position":"Senior QA engineer","projectList":[{"name":"Sberbank technologies"},{"name":"VTB24"}]}</li>
+        </ul></li><br/>
+    <li>DELETE - delete specific profile by id
+        <ul>
+            <li>Parameters: Long id</li>
+        </ul></li><br/>
+</ul>
 
-<p><a href="/rest/profiles">/rest/profiles</a> [GET(Long id|null), POST, PUT, DELETE(Long id)]</p>
-All profiles exist only during current session! Site will reset state on next connection.
-
-Example post json:
-{"name":"Pavel","surName":"Sinitcin","secondName":"Alexandrovich","phone":"+792096219035","email":"sample@gmail.com","position":"Senior
-QA engineer","projectList":[{"name":"Second"},{"name":"First"}]}
+<i>All profiles exist only during current session and linked with your IP! Site will reset state on next connection or in 7 days after first connection with current IP.</i><br/><br/>
 
 
 <p><b>Debug methods</b></p>
 
 <p><a href="/gui">/gui</a> [GET, POST(String message)]</p>
 
-<p><a href="/auth">/auth</a> [GET(Redirect to DELETE), POST, DELETE]</p>
+<p><a href="/auth">/auth</a> [POST, DELETE]</p>
 
 <p><a href="/registration">/registration</a> [POST(String login, String password]</p>
 
-
-<p><b>SOAP/WSDL Documentation:</b> http://wsdlIp:wsdlPort/wss/profiles?wsdl</p>
+<br/>
+<p><b><a href="http://50.3.71.93:9088/wss/profiles?wsdl">SOAP/WSDL Documentation</a></b></p>
 
 </body>
 </html>
-

@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TaskValidation {
     private static final Logger LOG = Log.getLogger(TaskValidation.class);
-    private static final int threshold = 3;
     private ServiceType serviceType;
 
     public TaskValidation(ServiceType serviceType) {
@@ -27,19 +26,24 @@ public class TaskValidation {
                 LOG.debug("Profile " + profile.getId() + " (" + profile.getFullName() + ") is invalid");
             }
         });
-        return counter.get() > 2 ? serviceType.getAnswerKey() : "You need to add " + (threshold - counter.get()) + " more valid profiles";
+        return counter.get() > 2 ? serviceType.getAnswerKey() : "You need to add " + (serviceType.getThreshold() - counter.get()) + " more valid profiles";
     }
 
     public enum ServiceType {
-        REST("RestKey_23576653"), SOAP("SoapKey_88135789");
+        REST("RestKey_23576653", 3), SOAP("SoapKey_88135789", 2);
         private String answerKey;
+        private int threshold;
 
-        ServiceType(String answerKey) {
+        ServiceType(String answerKey, int threshold) {
             this.answerKey = answerKey;
         }
 
         public String getAnswerKey() {
             return answerKey;
+        }
+
+        public int getThreshold() {
+            return threshold;
         }
     }
 }

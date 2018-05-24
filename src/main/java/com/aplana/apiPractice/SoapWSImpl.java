@@ -18,23 +18,12 @@ public class SoapWSImpl implements SoapWS {
     @Resource
     private WebServiceContext context;
     //TODO get SessionId from SOAPMessageContext via SOAPHandler (https://stackoverflow.com/questions/28487114/retrieving-soap-header-on-jaxws-server-side, https://www.mkyong.com/webservices/jax-ws/jax-ws-soap-handler-in-server-side/)
-    private static final String soapSession = "soapSession";
+    static final String soapSession = "soapSession";
 
     @Override
     public String getWelcomeMessage(String name) {
         return "Hello, " + name;
     }
-
-//    @Override
-//    public String getUniqueKey() {
-//        return UUID.randomUUID().toString();
-//    }
-//
-//    @Override
-//    public UUID getUUID(List<String> list) {
-//        System.out.println(list.toString());
-//        return UUID.randomUUID();
-//    }
 
 
     @Override

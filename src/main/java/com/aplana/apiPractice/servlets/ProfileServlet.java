@@ -60,13 +60,13 @@ public class ProfileServlet extends HttpServlet{
 
     @Override
     /** Обновление существующего профиля*/
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //TODO
     }
 
     @Override
     /** Добавление нового профиля*/
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType(chooseContentType(req.getParameter("contentType")) + ";charset=utf-8");
 
         String rqJson = getJsonContent(req);
