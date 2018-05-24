@@ -58,11 +58,11 @@ public class ProfileServlet extends HttpServlet{
 
     }
 
-    @Override
-    /** Обновление существующего профиля*/
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //TODO
-    }
+//    @Override
+//    /** Обновление существующего профиля*/
+//    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        //TODO
+//    }
 
     @Override
     /** Добавление нового профиля*/
