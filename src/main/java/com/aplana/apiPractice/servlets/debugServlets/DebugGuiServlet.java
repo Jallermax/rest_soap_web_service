@@ -39,15 +39,17 @@ public class DebugGuiServlet extends HttpServlet {
         pageVariables.put("message", message == null ? "" : message);
 
         if ("getProfileList".equals(message)) {
-//            response.getWriter().println(ProfileManager.getInstance(request.getSession().getId()).getProfiles().values().toString());
-            String profiles = "";
-            Iterator<SessionManager> iterator = ProfileManager.getSessionManagerSet().iterator();
-            while (iterator.hasNext()) {
-                SessionManager session = iterator.next();
-                profiles += "SessionId:" + session.getSessionId() + ", creationDate:" + session.getCreationDate().toString() + "\n\t" +
-                        ProfileManager.getInstance(session.getSessionId()).getProfiles().values().stream().map(profile -> JsonParser.createJson(profile, true)).collect(Collectors.toList());
-            }
-            response.getWriter().println(PageGenerator.updatePage(request, response,profiles));
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().println(JsonParser.createJson(ProfileManager.getSessionManagerSet(), true));
+
+//            String profiles = "";
+//            for (SessionManager session : ProfileManager.getSessionManagerSet()) {
+//                profiles += "SessionId:" + session.getSessionId() + ", creationDate:" + session.getCreationDate().toString() + "\n\t" +
+//                        ProfileManager.getInstance(session.getSessionId()).getProfiles().values().stream().map(profile -> JsonParser.createJson(profile, true)).collect(Collectors.toList());
+//            }
+//            response.getWriter().println(profiles);
+
+//            response.getWriter().println(PageGenerator.updatePage(request, response,profiles));
         } else {
             response.getWriter().println(PageGenerator.updatePage(request, response, message == null ? "" : message));
         }

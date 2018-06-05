@@ -55,7 +55,7 @@ public class ProfileManager {
 
     private static ProfileManager addNewManager(String sessionId) {
         ProfileManager manager = new ProfileManager();
-        SessionManager sessionManager = new SessionManager(sessionId);
+        SessionManager sessionManager = new SessionManager(sessionId, manager);
         sessionManagerSet.add(sessionManager);
         manager.initTestProfiles();
         manager.sessionId = sessionId;
