@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static com.aplana.apiPractice.ProfileManager.idTypeRegex;
 import static com.aplana.apiPractice.utils.Helpers.logException;
@@ -74,11 +75,14 @@ public class ProfileServlet extends HttpServlet{
         AddProfileRq profileRq;
         try {
             profileRq = JsonParser.parseJson(rqJson, AddProfileRq.class);
+            if (rqJson==null || profileRq==null) {
+                throw new NoSuchElementException("Valid json content not found!");
+            }
         } catch (Exception e) {
             //TODO Should I set text/html for fails?
             resp.setContentType(TEXT_HTML);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().print("Error parsing JSON: " + e.getCause());
+            resp.getWriter().print("Error parsing JSON: " + logException(e, true));
             return;
         }
         LOG.debug("JSON: " + JsonParser.createJson(rqJson, true));
@@ -153,7 +157,7 @@ public class ProfileServlet extends HttpServlet{
     private static String getJsonContent(HttpServletRequest req) {
         String rqJson = req.getParameter("json");
 
-        if (APP_JSON.equals(req.getContentType())) {
+        if (req.getContentType().contains(APP_JSON) || rqJson == null || rqJson.isEmpty()) {
             StringBuffer jb = new StringBuffer();
             String line;
             try {

@@ -29,8 +29,8 @@ public class Main {
     private static final Logger LOG = Log.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        LOG.setDebugEnabled(true);
         ConfigReader config = ConfigReader.getInstance();
+        Log.getRootLogger().setDebugEnabled(config.getDebug());
         LOG.info(Ipify.getPublicIp());
 
         startWSDLServer(config.getWsdlIp(), config.getWsdlPort());

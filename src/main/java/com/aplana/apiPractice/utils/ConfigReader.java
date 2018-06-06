@@ -33,6 +33,7 @@ public class ConfigReader {
     private String wsdlPort;
     private String restPort;
     private String templateFolder;
+    private Boolean debug;
 
 
     private ConfigReader() {
@@ -40,6 +41,7 @@ public class ConfigReader {
         wsdlPort = System.getProperty("servers.wsdl.port", getCfgMap().getOrDefault("servers.wsdl.port", "9088"));
         restPort = System.getProperty("servers.rest.port", getCfgMap().getOrDefault("servers.rest.port", "9089"));
         templateFolder = System.getProperty("templateFolder", getCfgMap().getOrDefault("templateFolder", "templates"));
+        debug = Boolean.parseBoolean(System.getProperty("debug", getCfgMap().getOrDefault("debug", "false")));
     }
 
 
@@ -74,5 +76,9 @@ public class ConfigReader {
 
     public String getTemplateFolder() {
         return templateFolder;
+    }
+
+    public Boolean getDebug() {
+        return debug;
     }
 }
