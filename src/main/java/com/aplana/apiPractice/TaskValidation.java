@@ -36,6 +36,7 @@ public class TaskValidation {
 
         ServiceType(String answerKey, int threshold) {
             this.answerKey = answerKey;
+            this.threshold = threshold;
         }
 
         public String getAnswerKey() {

@@ -56,4 +56,14 @@ public class RestSmokeTest {
         response.then().log().all(true)
                 .assertThat().statusCode(200);
     }
+
+    @Test
+    public void getTaskKey() {
+        Response response = RestAssured.given()
+                .baseUri(host)
+                .log().all(true)
+                .post("/rest/task_key");
+        response.then().log().all(true)
+                .assertThat().statusCode(200);
+    }
 }
