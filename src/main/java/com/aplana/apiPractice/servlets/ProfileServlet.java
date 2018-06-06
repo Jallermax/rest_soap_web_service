@@ -75,7 +75,7 @@ public class ProfileServlet extends HttpServlet{
         AddProfileRq profileRq;
         try {
             profileRq = JsonParser.parseJson(rqJson, AddProfileRq.class);
-            if (rqJson==null || profileRq==null) {
+            if (rqJson == null || profileRq == null) {
                 throw new NoSuchElementException("Valid json content not found!");
             }
         } catch (Exception e) {
@@ -86,24 +86,19 @@ public class ProfileServlet extends HttpServlet{
             return;
         }
         LOG.debug("JSON: " + JsonParser.createJson(rqJson, true));
+        Long id;
         try {
             profileRq.validate();
+            Profile profile = new Profile(profileRq);
+            id = ProfileManager.getInstance(req.getRemoteAddr()).addNewProfile(profile);
+            if (id == null) {
+                throw new DataValidation("Validation failed. Profile wasn't created. Use valid values");
+            }
         } catch (DataValidation e) {
             resp.setContentType(TEXT_HTML);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().print(logException(e, true));
+            resp.getWriter().print("Validation failed. Profile wasn't created. Use valid values:\n" + logException(e, true));
             return;
-        }
-        Profile profile = new Profile(profileRq);
-        Long id;
-        try {
-            id = ProfileManager.getInstance(req.getRemoteAddr()).addNewProfile(profile);
-            if (id == null) {
-                resp.setContentType(TEXT_HTML);
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().print("Validation failed. Profile wasn't created. Use valid values.");
-                return;
-            }
         } catch (ElementExistException e) {
             resp.setContentType(TEXT_HTML);
             resp.setStatus(HttpServletResponse.SC_CONFLICT);

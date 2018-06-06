@@ -13,15 +13,20 @@ import org.junit.jupiter.api.Test;
 public class RestSmokeTest {
 
     private static final Logger LOG = Log.getLogger(RestSmokeTest.class);
+    private static final String LOCALHOST = "http://localhost";
+    private static final String VIRMACH = "http://";
+
+
+    private String host = LOCALHOST + ":" + ConfigReader.getInstance().getRestPort();
 
     @Test
     public void addProfile() {
         Response response = RestAssured.given()
-                .baseUri("http://localhost:" + ConfigReader.getInstance().getRestPort())
+                .baseUri(host)
                 .contentType(ContentType.JSON)
-                .body("{\"name\":\"Maxim\",\"surName\":\"Sinitcin\",\"secondName\":\"Alexandrovich\",\"phone\":\"+792096219035\"," +
-                        "\"email\":\"sample@gmail.com\",\"position\":\"Senior QA engineer\"," +
-                        "\"projectList\":[{\"name\":\"Sberbank technologies\"},{\"name\":\"VTB24\"}]}")
+                .body("{\"name\":\"Test\",\"surName\":\"Autotestov\",\"secondName\":\"Testovich\",\"birthday\": \"Feb 2, 1905 12:00:00 AM\",\"phone\":\"+79200001035\"," +
+                        "\"email\":\"sample@gmail.com\",\"position\":\"Senior QA engineer\",\"projectList\":[{\"name\":\"Sberbank technologies\"}," +
+                        "{\"name\":\"VTB24\",\"description\": \"Описание 2.\",\"startDate\": \"Mar 01, 2018 12:00:00 AM\",\"endDate\": \"Mar 15, 2018 12:00:00 AM\"}]}")
                 .log().all(true)
                 .post("/rest/profiles");
 
@@ -33,10 +38,21 @@ public class RestSmokeTest {
     @Test
     public void getProfiles() {
         Response response = RestAssured.given()
-                .baseUri("http://localhost:" + ConfigReader.getInstance().getRestPort())
+                .baseUri(host)
                 .formParam("pretty", "true")
-                .log().everything(true)//.all()
+                .log().all(true)
                 .get("/rest/profiles");
+        response.then().log().all(true)
+                .assertThat().statusCode(200);
+    }
+
+    @Test
+    public void getAllProfiles() {
+        Response response = RestAssured.given()
+                .baseUri(host)
+                .formParam("message", "getProfileList")
+                .log().all(true)
+                .post("/gui");
         response.then().log().all(true)
                 .assertThat().statusCode(200);
     }
